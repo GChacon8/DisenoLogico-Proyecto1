@@ -1,18 +1,33 @@
 import tkinter as tk
 import pandas as pd
 import tabulate as tb
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as mpl
 import numpy as np
 
-binary_string=""
+binary_num=""
+decimal_num=""
+octal_num=""
+hexa_num =""
+
+def tab_conversiones(hexa_num, decimal_num, octal_num, bin_num):
+    print(tb.tabulate({'Hexadimal': [hexa_num], 
+                'Decimal': [decimal_num], 
+                'Octal': [octal_num],
+                'Binario': [bin_num]},
+                headers='keys', 
+                tablefmt='fancy_grid', 
+                missingval='N/A'))
+    
 
 def send():
     hexa_num = entry.get()
-    print(hex_to_dec(hexa_num))
-    print(hex_to_oct(hexa_num))
-    print(hex_to_bin(hexa_num))
-    binary_string = hex_to_bin(hexa_num)
-    plot_NRZI(binary_string)
+    decimal_num = hex_to_dec(hexa_num)
+    octal_num = hex_to_oct(hexa_num)
+    binary_num = hex_to_bin(hexa_num)
+
+    tab_conversiones(hexa_num, decimal_num, octal_num, binary_num)
+
+    plot_NRZI(binary_num)
     
 def es_hexadecimal(numero):
     """
@@ -66,18 +81,18 @@ def plot_NRZI(binary_string):
             signal.append(0)
     
     # plot the signal
-    fig, ax = plt.subplots()
+    fig, ax = mpl.subplots()
     ax.step(range(len(signal)), signal, where='post', color='blue')
     ax.set_title('NRZI Signal')
     ax.set_xlabel('Bit')
     ax.set_ylabel('Signal Level')
     ax.set_ylim([-0.5, 1.5])
-    plt.show()
+    mpl.show()
 
 # Crea una ventana principal
 root = tk.Tk()
 root.title("Interfaz con entrada de texto y botón")
-root.geometry("300x300")
+root.geometry("250x120")
 
 # Crea una etiqueta y una entrada de texto
 label = tk.Label(root, text="Ingrese su texto:")
@@ -87,7 +102,7 @@ entry.pack()
 
 # Crea un botón y lo vincula a la función "mostrar_texto"
 button = tk.Button(root, text="Enviar", command=send)
-button.pack()
+button.place(x=100,y=60)
 
 # Inicia el bucle de eventos principal
 root.mainloop()
